@@ -7,7 +7,7 @@
   <title>葡萄酒英文默寫｜四大葡萄品種</title>
   <style>
     :root { color-scheme: dark; --bg:#10141c; --panel:#1b2230; --panel2:#222b3a; --line:#344053; --text:#f2f5fb; --muted:#a5b0c4; --gold:#e6be78; --white:#f5dba1; --red:#db8696; --ok:#83dbb6; --bad:#ffa2a8; }
-    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    *{box-sizing:border-box} [hidden]{display:none!important} html{scroll-behavior:smooth}
     body{margin:0;min-height:100vh;background:radial-gradient(ellipse 95% 55% at 50% -10%,#28334a 0%,transparent 70%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.5}
     .wrap{width:min(740px,calc(100% - 30px));margin:0 auto;padding:42px 0 70px}
     .eyebrow{color:var(--gold);font-size:12px;font-weight:750;letter-spacing:.18em;text-transform:uppercase}
@@ -65,7 +65,7 @@
     <div class="actions"><button class="primary" type="submit" id="submit-btn">提交批改</button><button class="secondary" type="button" id="restart-btn">重新出題 ↻</button><button class="secondary" type="button" id="retry-btn" hidden>只練錯題</button></div>
   </form>
   <section id="result" class="result" aria-live="polite"><div class="eyebrow">RESULT</div><div class="score" id="score"></div><p id="result-note"></p></section>
-  <section class="study" aria-label="背誦拆字法"><h2>🧠 默寫拆字法</h2><dl>
+  <section id="study" class="study" aria-label="背誦拆字法" hidden><h2>🧠 默寫拆字法</h2><dl>
     <div class="pair"><dt>麗絲玲</dt><dd>Ri · es · ling</dd></div>
     <div class="pair"><dt>白蘇維翁</dt><dd>Sau · vig · non / Blanc</dd></div>
     <div class="pair"><dt>梅洛</dt><dd>Mer · lot</dd></div>
@@ -93,7 +93,7 @@
   function make(tag,className,textContent){const el=document.createElement(tag);if(className)el.className=className;if(textContent!==undefined)el.textContent=textContent;return el;}
   function newQuiz(items){
     current=shuffle(items); checked=false; mistakes=[];
-    $('result').classList.remove('visible');$('retry-btn').hidden=true;$('submit-btn').disabled=false;
+    $('result').classList.remove('visible');$('study').hidden=true;$('retry-btn').hidden=true;$('submit-btn').disabled=false;
     $('quiz-heading').textContent=items.length===bank.length?'默寫測驗':'錯題再練';
     $('question-list').replaceChildren();
     current.forEach((q,i)=>{
@@ -128,6 +128,7 @@
     $('score').textContent=`${pct} / 100`;
     $('result-note').textContent=correct===current.length?'全對！再重新出題一次，測試係咪真正記熟。':`答對 ${correct} / ${current.length} 題。可以先睇正確拼字，再按「只練錯題」。`;
     $('result').classList.add('visible');
+    $('study').hidden=false;
     $('retry-btn').hidden=mistakes.length===0;
     $('submit-btn').disabled=true;
     if(current.length===bank.length){const last=bestScore(),old=last===null?-1:Number(last);if(pct>old)saveBest(pct);updateBest();}
